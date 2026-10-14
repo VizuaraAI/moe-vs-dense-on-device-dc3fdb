@@ -1,0 +1,24 @@
+# Core measurement stack.
+# Pinned to lower bounds rather than exact versions so this still installs in a
+# few months. If a run behaves oddly, `pip freeze > requirements.lock.txt` and
+# record the lock file next to the results it produced.
+
+torch>=2.4.0
+transformers>=4.45.0
+accelerate>=1.0.0
+tokenizers>=0.20.0
+safetensors>=0.4.5
+huggingface-hub>=0.26.0
+
+# Datasets for the quality guard rail.
+datasets>=3.0.0
+
+# Measurement and analysis.
+psutil>=6.0.0          # process memory sampling
+numpy>=1.26.0
+matplotlib>=3.9.0      # sweep plots
+pyyaml>=6.0.0          # config loading
+
+# Optional, install when you move to quantized on-device weights.
+# llama-cpp-python>=0.3.0
+# bitsandbytes>=0.44.0   # int8/int4 via transformers, CUDA only

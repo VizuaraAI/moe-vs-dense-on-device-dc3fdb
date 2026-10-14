@@ -1,0 +1,47 @@
+# Default experiment grid.
+#
+# Prefer changing this file over changing code. If an experiment cannot be
+# expressed here, that is usually a sign the harness needs a new knob rather
+# than a new script.
+
+experiment:
+  name: baseline-active-matched
+  pair: olmoe-vs-qwen15        # see src/registry.py for the full list
+  results_path: results/results.jsonl
+
+# Which device tier's hardware constants to use for the analytical model.
+# Replace these with numbers measured by `python -m src.cli device`.
+tier: laptop
+
+backend:
+  name: hf                     # hf | llamacpp
+  quantization: none           # none | int8 | int4 | q4_k_m (llamacpp)
+  n_gpu_layers: 0              # llamacpp only, 0 keeps everything on CPU
+
+workload:
+  concurrencies: [1, 2, 4, 8, 16, 32]
+  prompt_tokens: [128, 1024, 4096]
+  max_new_tokens: 128
+  repeats: 5
+  warmup: 1
+
+quality:
+  task: hellaswag
+  n_examples: 200
+  # Run this after every quantization change. A model that lost accuracy during
+  # quantization will look misleadingly fast.
+  run_after_quantization: true
+
+roofline:
+  # Override the built-in tier constants with your own measurements.
+  # memory_bandwidth_gbps: 204.8
+  # achievable_tflops: 8.0
+  # memory_capacity_gb: 12.0
+  # flash_bandwidth_gbps: 1.5
+  expert_reuse: 0.0            # set from the measured expert cache hit rate
+
+reporting:
+  # Paper rule: never report a latency without the memory next to it.
+  require_memory_with_latency: true
+  # Failed configurations stay in the record.
+  keep_failures: true
